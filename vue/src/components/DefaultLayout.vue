@@ -39,15 +39,6 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              <button
-                type="button"
-                class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-              >
-                <span class="absolute -inset-1.5" />
-                <span class="sr-only">View notifications</span>
-                <BellIcon class="h-6 w-6" aria-hidden="true" />
-              </button>
-
               <!-- Profile dropdown -->
               <Menu as="div" class="relative ml-3">
                 <div>
@@ -74,18 +65,11 @@
                   <MenuItems
                     class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                   >
-                    <MenuItem
-                      v-for="item in userNavigation"
-                      :key="item.name"
-                      v-slot="{ active }"
-                    >
+                    <MenuItem v-slot="{ active }">
                       <a
-                        :href="item.href"
-                        :class="[
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700',
-                        ]"
-                        >{{ item.name }}</a
+                        @click="logout()"
+                        :class="['block px-4 py-2 text-sm text-gray-700 cursor-pointer']"
+                        >Sign out</a
                       >
                     </MenuItem>
                   </MenuItems>
@@ -141,23 +125,12 @@
                 {{ user.email }}
               </div>
             </div>
-            <button
-              type="button"
-              class="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <span class="absolute -inset-1.5" />
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
           </div>
           <div class="mt-3 space-y-1 px-2">
             <DisclosureButton
-              v-for="item in userNavigation"
-              :key="item.name"
-              as="a"
-              :href="item.href"
-              class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-              >{{ item.name }}</DisclosureButton
+              @click="logout()"
+              class="block rounded-md px-3 cursor-pointer py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+              >Sign out</DisclosureButton
             >
           </div>
         </div>
@@ -179,22 +152,23 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useStore } from "vuex";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 const store = useStore();
+const router = useRouter();
+
+function logout() {
+  store.commit('logout');
+  router.push({ name: 'Login' });
+}
 
 const user = computed(() => store.state.user.data);
 
 const navigation = [
   { name: "Dashboard", to: { name: "Dashboard" } },
   { name: "Survey", to: { name: "Survey" }, current: false },
-];
-
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
 ];
 </script>

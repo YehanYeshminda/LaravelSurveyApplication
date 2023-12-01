@@ -12,7 +12,12 @@ const store = createStore({
         }
     },
     getters: {},
-    mutations: {},
+    mutations: {
+        logout: state => {
+            state.user.token = null;
+            state.user.data = {};
+        }
+    },
     actions: {},
     modules: {}
 });
